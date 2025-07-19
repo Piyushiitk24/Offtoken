@@ -1,0 +1,67 @@
+# Sample Document for Testing Token Counter Pro
+
+This document contains various types of content to test the token counting functionality across different models and tokenizers.
+
+## Introduction
+
+Token counting is crucial for:
+- API cost estimation
+- Context window management
+- Performance optimization
+- Content planning
+
+## Code Examples
+
+```python
+def count_tokens(text, model):
+    tokenizer = get_tokenizer(model)
+    return len(tokenizer.encode(text))
+
+# Usage
+text = "Hello, world!"
+tokens = count_tokens(text, "gpt-4")
+print(f"Tokens: {tokens}")
+```
+
+## Mixed Content
+
+Here's a mix of content types:
+
+1. **Numbers**: 1, 2, 3, 100, 1000, 2024
+2. **Punctuation**: !@#$%^&*()_+-={}[]|:";'<>?,.
+3. **URLs**: https://example.com, www.test.org
+4. **Emails**: user@example.com, admin@test.co.uk
+5. **Special tokens**: [START], [END], <|endoftext|>
+
+## Long Text Sample
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+## Technical Terms
+
+- Tokenization algorithms
+- Byte-pair encoding (BPE)
+- SentencePiece
+- Subword tokenization
+- Context windows
+- Transformer architectures
+
+## Different Languages
+
+- English: Hello, world!
+- Spanish: ¡Hola, mundo!
+- French: Bonjour, le monde!
+- German: Hallo, Welt!
+- Japanese: こんにちは、世界！
+
+## Conclusion
+
+This sample document should provide a good baseline for testing token counting across different models and use cases. The variety of content types helps demonstrate how different tokenizers handle various text patterns.
+
+**Expected Results:**
+- GPT-4: ~400-500 tokens
+- GPT-3.5: ~400-500 tokens  
+- Llama 2: ~450-550 tokens
+- Mistral: ~400-500 tokens
+
+*Note: Actual token counts may vary based on specific model versions and tokenizer implementations.*
