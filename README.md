@@ -97,6 +97,9 @@ python test.py
 - **No API Calls**: No internet required after initial setup
 - **No Data Collection**: No usage tracking or data transmission
 - **Secure**: Temporary files are automatically cleaned up
+- **Secret Protection**: Pre-commit hooks prevent accidental secret uploads
+- **Environment Variables**: Secure configuration with `.env` files
+- **Security Scanning**: Built-in scanner detects potential secrets
 
 ## 🎨 Project Structure
 
@@ -108,9 +111,42 @@ Offtoken/
 ├── test.py             # Test suite
 ├── sample.txt          # Sample document for testing
 ├── README.md           # This file
-├── .gitignore          # Git ignore rules
+├── SECURITY.md         # Security policy and guidelines
+├── .gitignore          # Git ignore rules (includes security patterns)
+├── .env.example        # Environment variables template
+├── security_scan.py    # Security scanner for detecting secrets
+├── pre_commit_hook.py  # Git pre-commit security hook
+├── setup_security.sh   # Security setup script
+├── .streamlit/         # Streamlit configuration
 └── .venv/              # Virtual environment
 ```
+
+## 🛡️ Security Features
+
+### Automatic Protection
+- **Pre-commit hooks**: Automatically scan for secrets before each commit
+- **Comprehensive .gitignore**: Blocks sensitive files from being tracked
+- **Environment templates**: Safe configuration with `.env.example`
+- **High-entropy detection**: Identifies potential API keys and secrets
+
+### Manual Security Tools
+```bash
+# Run security scan manually
+python3 security_scan.py
+
+# Set up security measures (one-time)
+./setup_security.sh
+
+# Check for potential secrets in files
+python3 security_scan.py --verbose
+```
+
+### Best Practices
+1. **Never commit secrets**: Use environment variables instead
+2. **Use .env files**: Copy `.env.example` to `.env` and add your secrets
+3. **Run security scans**: Before pushing to GitHub
+4. **Review changes**: Always check what you're committing
+5. **Keep dependencies updated**: Regular security updates
 
 ## 🤝 Contributing
 
