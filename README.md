@@ -1,42 +1,55 @@
-# ✨ TokenForge - Professional Token Counter
+# ✨ TokenForge - Professional AI Token Counter & Cost Calculator
 
-A **beautiful, professional-grade token counting tool** with authentic tokenizers and stunning PRIDE-themed UI. Built for developers, researchers, and AI enthusiasts who demand accuracy and style.
+> **Beautiful PRIDE-themed token analysis tool with authentic OpenAI tokenizers**
 
-## 🎨 Beautiful New UI
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-brightgreen?style=for-the-badge&logo=github)](https://piyushiitk24.github.io/Offtoken/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)](https://hub.docker.com)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Cloud%20Ready-red?style=for-the-badge&logo=streamlit)](https://streamlit.io/cloud)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
+[![Security](https://img.shields.io/badge/Security-A%2B-green?style=for-the-badge&logo=security)](SECURITY.md)
 
-**TokenForge** now features a completely redesigned interface with:
-- ✨ **Stunning PRIDE-themed colors** - Subtle, professional, and inclusive design
-- 🎯 **Modern card-based layout** - Clean, organized, and intuitive
-- 📱 **Fully responsive design** - Perfect on desktop, tablet, and mobile
-- 🌈 **Smooth animations** - Delightful interactions and transitions
-- 🎭 **Dark mode support** - Adapts to your system preferences
+**TokenForge** is a professional-grade AI token counting and cost estimation tool featuring a stunning PRIDE-themed user interface. Built for developers, researchers, AI engineers, and content creators who need accurate token analysis for GPT-4, GPT-3.5, and other OpenAI language models.
 
-## ✨ Features
+## 🌟 **Why TokenForge?**
 
-- **🎯 Authentic Tokenizers**: Uses `tiktoken` from OpenAI - the same tokenizers used by GPT-4, GPT-3.5, and other OpenAI models
-- **📄 Multi-Format Support**: PDF, DOCX, TXT with OCR support for scanned documents
-- **💰 Smart Cost Estimation**: Accurate API cost calculation with preset pricing for popular models
-- **🎨 Beautiful Interface**: Modern, PRIDE-themed UI with smooth animations and responsive design
-- **📊 Detailed Analytics**: Comprehensive token analysis with breakdowns and efficiency metrics
-- **📥 Export Options**: CSV and TXT export with detailed usage data
-- **🔒 Privacy First**: 100% local processing - no API calls or data collection required
+### 🎯 **100% Accurate Token Counting**
+- Uses **authentic OpenAI tiktoken library** - the same tokenizers used by GPT-4 and ChatGPT
+- **Exact same algorithms** as OpenAI APIs for guaranteed accuracy
+- Supports GPT-4, GPT-3.5 Turbo, GPT-3, cl100k_base, and p50k_base encodings
 
-## 🚀 Quick Start
+### 🎨 **Beautiful PRIDE-Themed Interface**
+- **Stunning visual design** with subtle PRIDE color palette celebrating diversity
+- **Smooth animations** and modern card-based layout
+- **Fully responsive** - perfect on desktop, tablet, and mobile
+- **Professional aesthetics** suitable for enterprise environments
 
-### One-Command Launch (Recommended)
+### 💰 **Smart Cost Estimation**
+- **Real-time API cost calculation** with preset pricing for popular models
+- **Budget planning tools** for large-scale AI projects
+- **Token efficiency analysis** to optimize your prompts and content
+
+### 🔒 **Privacy-First Architecture**
+- **100% local processing** - your documents never leave your device
+- **No API calls required** - works completely offline after setup
+- **Enterprise-grade security** with automated secret detection
+- **No data collection** or tracking whatsoever
+
+## 🚀 **Quick Start Guide**
+
+### ⚡ **One-Command Launch** (Recommended)
 ```bash
-# Clone and launch in one go
+# Clone and launch in seconds
 git clone https://github.com/Piyushiitk24/Offtoken.git
 cd Offtoken
 python3 setup.py
 ```
 
-### Manual Setup
+### 🔧 **Manual Setup** (Advanced Users)
 ```bash
-# Install system dependencies (macOS)
+# Prerequisites: Python 3.8+, Homebrew (macOS)
 brew install tesseract poppler
 
-# Setup Python environment
+# Environment setup
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -45,96 +58,95 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## 🌐 Deployment Options
-
-TokenForge supports multiple deployment methods:
-
-### 🏠 Local Development
-Perfect for private use and development:
+### � **Interactive Demo**
 ```bash
-python3 setup.py  # One-command setup
+# Experience all features
+python3 demo_tokenforge.py
+
+# Quick launcher with options
+python3 start.py
 ```
 
-### ☁️ Streamlit Cloud
-Easy sharing and collaboration:
-1. Fork this repository
-2. Connect to [Streamlit Cloud](https://streamlit.io/cloud)
-3. Deploy with one click!
+## �🌐 **Multiple Deployment Options**
 
-### 🌍 GitHub Pages
-Static landing page with deployment instructions:
-- Automatically deploys to `https://yourusername.github.io/Offtoken`
-- Beautiful responsive design
-- Direct links to local setup
+TokenForge supports deployment anywhere - from local development to enterprise cloud:
 
-### 🐳 Docker
-Production-ready containerized deployment:
-```bash
-# Quick start with Docker
-docker-compose up -d
+| Deployment Type | Command | Best For | Setup Time |
+|-----------------|---------|----------|------------|
+| 🏠 **Local** | `python3 setup.py` | Development, Privacy | 2 minutes |
+| ☁️ **Streamlit Cloud** | Fork → Connect → Deploy | Team Sharing | 5 minutes |
+| 🌍 **GitHub Pages** | Auto-deployed | Documentation | Automatic |
+| 🐳 **Docker** | `docker-compose up -d` | Production | 3 minutes |
 
-# Or build manually
-docker build -t tokenforge .
-docker run -p 8501:8501 tokenforge
-```
+**📖 Complete deployment guide:** [DEPLOYMENT.md](DEPLOYMENT.md)
 
-**📖 See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide**
+## 🎨 **Visual Showcase**
 
-## 🎨 UI Screenshots
-
-### 🌈 Beautiful PRIDE-Themed Interface
-- **Hero Section**: Stunning gradient backgrounds with smooth animations
-- **Interactive Cards**: Hover effects and professional styling
+### 🌈 **PRIDE-Themed Design System**
+- **Hero Sections**: Gradient backgrounds with smooth animations
+- **Interactive Cards**: Professional hover effects and transitions  
 - **Smart Metrics**: Color-coded analytics with PRIDE accent colors
-- **Responsive Design**: Perfect on all screen sizes
+- **Responsive Layout**: Perfect experience on any screen size
 
-### 📊 Enhanced Analytics
-- **Token Efficiency**: Real-time token-to-word ratios
-- **Cost Breakdown**: Detailed pricing analysis
-- **Export Ready**: Professional reports in multiple formats
+### 📊 **Professional Analytics**
+- **Token Efficiency Ratios**: Optimize your content for specific models
+- **Cost Breakdown Analysis**: Detailed pricing estimates with export
+- **First Token Previews**: See exactly how your text gets tokenized
+- **Comprehensive Reports**: Professional CSV and TXT exports
 
-## 📊 Supported Tokenizers
+## 📊 **Supported AI Models & Tokenizers**
 
-All tokenizers use the **exact same algorithms** as their respective APIs:
+TokenForge uses **authentic OpenAI tokenizers** for 100% accurate results:
 
-| Model | Description | Use Case |
-|-------|-------------|----------|
-| **GPT-4** | OpenAI GPT-4 | Most accurate for GPT-4 API usage |
-| **GPT-3.5 Turbo** | OpenAI GPT-3.5 | ChatGPT and GPT-3.5 APIs |
-| **GPT-3** | OpenAI GPT-3 | Legacy text-davinci-003 |
-| **cl100k_base** | OpenAI encoding | GPT-4 and GPT-3.5 compatible |
-| **p50k_base** | OpenAI encoding | GPT-3 and Codex compatible |
+| Model | Tokenizer | Description | Best For |
+|-------|-----------|-------------|----------|
+| **GPT-4** | `gpt-4` | Latest OpenAI model | Most accurate GPT-4 API usage |
+| **GPT-3.5 Turbo** | `gpt-3.5-turbo` | ChatGPT model | ChatGPT and GPT-3.5 APIs |
+| **GPT-3** | `text-davinci-003` | Legacy GPT-3 | text-davinci-003 API |
+| **cl100k_base** | `cl100k_base` | Modern encoding | GPT-4, GPT-3.5 compatible |
+| **p50k_base** | `p50k_base` | Classic encoding | GPT-3, Codex compatible |
 
-## 🎯 Use Cases
+## 🎯 **Use Cases & Applications**
 
-### 💰 **API Cost Planning**
-- Calculate exact costs before making expensive API calls
-- Optimize prompts for maximum efficiency
-- Budget planning for large-scale projects
+### 💰 **API Cost Optimization**
+- **Pre-flight cost estimation** before expensive API calls
+- **Budget planning** for large-scale AI projects  
+- **Prompt optimization** to reduce token usage
+- **ROI analysis** for AI content generation
 
 ### 📏 **Context Window Management**
-- Ensure text fits within model limits (8K/32K tokens)
-- Perfect for GPT-4's context constraints
-- Avoid costly API failures
+- **Ensure prompts fit** within model limits (8K/32K tokens)
+- **Optimize content length** for specific models
+- **Avoid costly API failures** due to token limits
+- **Smart content chunking** for large documents
 
-### 🔬 **Research & Development**
-- Analyze tokenization patterns across models
-- Compare efficiency between different approaches
-- Academic research and optimization studies
+### 🔬 **AI Research & Development**
+- **Compare tokenization** across different models
+- **Analyze text compression** ratios and efficiency
+- **Academic research** on language model behavior
+- **Content optimization** studies and analysis
 
-### 🎨 **Content Optimization**
-- Optimize marketing copy for token efficiency
-- Streamline documentation and content
-- Perfect prompts for specific token counts
+### 🎨 **Content Creation & Marketing**
+- **Optimize marketing copy** for token efficiency
+- **Streamline documentation** and technical content
+- **Perfect prompt engineering** for specific token counts
+- **Content audit** and optimization workflows
 
-## 📱 How to Use TokenForge
+## 📱 **How to Use TokenForge**
 
-1. **🚀 Launch**: Run `python3 setup.py` or use any deployment method
-2. **🤖 Select Model**: Choose your target tokenizer from the beautiful dropdown
-3. **📄 Input Content**: Upload documents or paste text directly
-4. **💰 Set Pricing**: Configure cost estimation (optional)
-5. **📊 Analyze**: Get detailed token counts and beautiful analytics
-6. **📥 Export**: Download professional reports as CSV or TXT
+### 🚀 **Step-by-Step Guide**
+1. **Launch Application**: Use any deployment method above
+2. **Select AI Model**: Choose your target tokenizer (GPT-4, GPT-3.5, etc.)
+3. **Input Content**: Upload documents (PDF/DOCX/TXT) or paste text
+4. **Configure Pricing**: Set API costs for accurate estimation (optional)
+5. **Analyze Results**: Get detailed token counts with beautiful visualizations
+6. **Export Reports**: Download professional CSV or TXT reports
+
+### 💡 **Pro Tips for Best Results**
+- **Use model-specific tokenizers** for most accurate API cost estimation
+- **Test different models** to find the most efficient tokenization
+- **Export results** for record-keeping and budget planning
+- **Leverage OCR features** for scanned documents and images
 
 ## 🔧 Technical Architecture
 
