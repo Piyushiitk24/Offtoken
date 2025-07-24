@@ -252,3 +252,6 @@ backups/
 !app.py
 !test.py
 !README.md
+!start.py
+!demo_tokenforge.py
+!preview_pages.py
