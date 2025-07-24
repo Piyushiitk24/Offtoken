@@ -6,10 +6,11 @@
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Latest-red)
 ![License](https://img.shields.io/badge/License-MIT-green)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-brightgreen)](https://piyushiitk24.github.io/Offtoken/)
 
 **🌈 Professional AI token counter with beautiful UI for OpenAI models**
 
-[🚀 Quick Start](#quick-start) • [📊 Features](#features) • [🎯 Use Cases](#use-cases) • [📖 Documentation](#documentation)
+[🌐 **Live Website**](https://piyushiitk24.github.io/Offtoken/) • [🚀 Quick Start](#quick-start) • [📊 Features](#features) • [🎯 Use Cases](#use-cases)
 
 </div>
 
