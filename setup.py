@@ -1,95 +1,86 @@
 #!/usr/bin/env python3
 """
-Token Counter Pro - Setup and Launch Script
-Handles all dependencies and launches the application
+TokenForge - Setup and Launch Script
+Professional setup with automatic dependency management
 """
 
 import subprocess
 import sys
 import os
+import webbrowser
 from pathlib import Path
 
 def run_command(cmd, description=""):
-    """Run a command and handle errors"""
+    """Run a command and handle errors gracefully"""
     print(f"🔄 {description}")
     try:
         result = subprocess.run(cmd, shell=True, check=True, capture_output=True, text=True)
         if result.stdout:
-            print(f"   ✅ {result.stdout.strip()}")
+            print(f"   ✅ Success")
         return True
     except subprocess.CalledProcessError as e:
         print(f"   ❌ Error: {e.stderr.strip()}")
         return False
 
-def check_system_deps():
-    """Check and install system dependencies"""
-    print("🔍 Checking system dependencies...")
+def install_dependencies():
+    """Install Python dependencies"""
+    print("� Installing dependencies...")
     
-    # Check Homebrew
-    if not run_command("which brew", "Checking Homebrew"):
-        print("❌ Homebrew not found. Install from https://brew.sh")
+    # Upgrade pip
+    if not run_command(f"{sys.executable} -m pip install --upgrade pip", "Upgrading pip"):
         return False
     
-    # Check and install Tesseract
-    if not run_command("which tesseract", "Checking Tesseract"):
-        if not run_command("brew install tesseract", "Installing Tesseract"):
-            return False
-    
-    # Check and install Poppler
-    if not run_command("which pdftoppm", "Checking Poppler"):
-        if not run_command("brew install poppler", "Installing Poppler"):
-            return False
-    
-    return True
-
-def setup_python_env():
-    """Setup Python virtual environment"""
-    print("🐍 Setting up Python environment...")
-    
-    # Create virtual environment
-    if not Path(".venv").exists():
-        if not run_command("python3 -m venv .venv", "Creating virtual environment"):
-            return False
-    
-    # Install dependencies
-    activate_cmd = "source .venv/bin/activate && "
-    
-    if not run_command(f"{activate_cmd}pip install --upgrade pip", "Upgrading pip"):
-        return False
-    
-    if not run_command(f"{activate_cmd}pip install -r requirements.txt", "Installing dependencies"):
+    # Install requirements
+    if not run_command(f"{sys.executable} -m pip install -r requirements.txt", "Installing packages"):
         return False
     
     return True
 
-def main():
-    print("🚀 Token Counter Pro Setup")
-    print("=" * 40)
-    
-    # Check system dependencies
-    if not check_system_deps():
-        print("❌ System setup failed")
-        sys.exit(1)
-    
-    # Setup Python environment
-    if not setup_python_env():
-        print("❌ Python setup failed")
-        sys.exit(1)
-    
+def launch_app():
+    """Launch the TokenForge application"""
     print("\n✅ Setup complete!")
-    print("🌐 Starting Token Counter Pro...")
-    print("📱 Open http://localhost:8501 in your browser")
+    print("🌐 Starting TokenForge...")
+    print("📱 Your browser will open automatically")
     print("\nPress Ctrl+C to stop the application\n")
     
-    # Launch the application
-    activate_cmd = "source .venv/bin/activate && "
     try:
-        subprocess.run(f"{activate_cmd}streamlit run app.py", shell=True, check=True)
+        # Open browser after a short delay
+        import threading
+        import time
+        
+        def open_browser():
+            time.sleep(2)
+            webbrowser.open('http://localhost:8501')
+        
+        threading.Thread(target=open_browser, daemon=True).start()
+        
+        # Launch Streamlit
+        subprocess.run([sys.executable, "-m", "streamlit", "run", "app.py", "--server.headless=true"], check=True)
+        
     except KeyboardInterrupt:
-        print("\n👋 Application stopped")
+        print("\n� TokenForge stopped")
     except Exception as e:
-        print(f"❌ Error launching application: {e}")
+        print(f"❌ Error launching TokenForge: {e}")
         sys.exit(1)
+
+def main():
+    print("🚀 TokenForge Setup")
+    print("=" * 30)
+    
+    # Check Python version
+    if sys.version_info < (3, 8):
+        print("❌ Python 3.8+ required")
+        sys.exit(1)
+    
+    print(f"✅ Python {sys.version.split()[0]} detected")
+    
+    # Install dependencies
+    if not install_dependencies():
+        print("❌ Dependency installation failed")
+        sys.exit(1)
+    
+    # Launch application
+    launch_app()
 
 if __name__ == "__main__":
     main()
