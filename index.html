@@ -241,6 +241,10 @@
             .features {
                 grid-template-columns: 1fr;
             }
+            
+            .hero div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
         }
         
         @keyframes fadeInUp {
@@ -265,8 +269,25 @@
         <div class="hero fade-in">
             <h1>✨ TokenForge</h1>
             <p>Professional token counting with authentic tokenizers</p>
-            <a href="#local" class="cta-button">🚀 Run Locally</a>
-            <a href="https://github.com/Piyushiitk24/Offtoken" class="cta-button">📂 View on GitHub</a>
+            
+            <!-- Main Options -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div style="background: linear-gradient(135deg, var(--pride-green)20, var(--pride-blue)20); padding: 2rem; border-radius: 16px; border: 2px solid var(--pride-green);">
+                    <h3 style="margin-bottom: 1rem; color: var(--pride-green); font-size: 1.5rem;">🌐 Use Online</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 1rem;">Start analyzing tokens immediately in your browser. No installation required!</p>
+                    <a href="webapp.html" class="cta-button" style="background: linear-gradient(135deg, var(--pride-green), var(--pride-blue)); width: 100%; text-align: center; display: block;">🚀 Launch Web App</a>
+                    <p style="font-size: 0.9rem; margin-top: 1rem; opacity: 0.8;">✅ Instant access • All processing in browser • No data sent to servers</p>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, var(--pride-purple)20, var(--pride-orange)20); padding: 2rem; border-radius: 16px; border: 2px solid var(--pride-purple);">
+                    <h3 style="margin-bottom: 1rem; color: var(--pride-purple); font-size: 1.5rem;">🔒 Maximum Privacy</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 1rem;">Download and run locally for complete privacy and offline use.</p>
+                    <a href="#local" class="cta-button" style="background: linear-gradient(135deg, var(--pride-purple), var(--pride-orange)); width: 100%; text-align: center; display: block;">🏠 Setup Locally</a>
+                    <p style="font-size: 0.9rem; margin-top: 1rem; opacity: 0.8;">✅ 100% offline • OCR support • Sensitive documents safe</p>
+                </div>
+            </div>
+            
+            <a href="https://github.com/Piyushiitk24/Offtoken" class="cta-button" style="margin-top: 1rem;">📂 View on GitHub</a>
         </div>
         
         <!-- Features Section -->
@@ -330,37 +351,24 @@
         
         <!-- Deployment Options -->
         <div class="deployment-options fade-in" id="local">
-            <h2>🚀 Deployment Options</h2>
-            <p>Choose how you want to run TokenForge</p>
+            <h2>🏠 Local Setup for Maximum Privacy</h2>
+            <p>For sensitive documents, complete offline use, and maximum privacy</p>
             
             <div class="deployment-grid">
                 <div class="deployment-card">
-                    <h3>🏠 Local Development</h3>
-                    <p>Run on your local machine with full features</p>
+                    <h3>⚡ Quick Setup</h3>
+                    <p>One command to install and launch</p>
                     <div class="code-block">
-# Clone the repository
+# Clone and setup in one go
 git clone https://github.com/Piyushiitk24/Offtoken.git
 cd Offtoken
-
-# One-command setup and launch
 python3 setup.py
                     </div>
-                    <p><strong>✅ Perfect for:</strong> Development, private documents, offline use</p>
+                    <p><strong>✅ Perfect for:</strong> Quick start, first-time users</p>
                 </div>
                 
                 <div class="deployment-card">
-                    <h3>🌐 Streamlit Cloud</h3>
-                    <p>Deploy to Streamlit Cloud for easy sharing</p>
-                    <div class="code-block">
-# Fork the repository on GitHub
-# Connect to Streamlit Cloud
-# Deploy with one click
-                    </div>
-                    <p><strong>✅ Perfect for:</strong> Team sharing, public demos, easy access</p>
-                </div>
-                
-                <div class="deployment-card">
-                    <h3>🖥️ Manual Setup</h3>
+                    <h3>🔧 Manual Setup</h3>
                     <p>Traditional installation method</p>
                     <div class="code-block">
 # Install dependencies manually
@@ -371,27 +379,78 @@ streamlit run app.py
                     </div>
                     <p><strong>✅ Perfect for:</strong> Custom configurations, advanced users</p>
                 </div>
+                
+                <div class="deployment-card">
+                    <h3>☁️ Cloud Deploy</h3>
+                    <p>Deploy to Streamlit Cloud</p>
+                    <div class="code-block">
+# Fork repository on GitHub
+# Connect to Streamlit Cloud
+# Deploy with one click
+                    </div>
+                    <p><strong>✅ Perfect for:</strong> Team sharing, custom instances</p>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, var(--pride-purple)15, var(--pride-orange)15); padding: 2rem; border-radius: 16px; margin-top: 2rem; text-align: center;">
+                <h3>🔒 Why Run Locally?</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem; text-align: left;">
+                    <div>
+                        <h4>�️ Maximum Privacy</h4>
+                        <p>Your documents never leave your device. Perfect for confidential or sensitive content.</p>
+                    </div>
+                    <div>
+                        <h4>🔍 OCR Support</h4>
+                        <p>Process scanned PDFs with OCR. Full document analysis capabilities.</p>
+                    </div>
+                    <div>
+                        <h4>⚡ Best Performance</h4>
+                        <p>Native Streamlit interface with faster processing and more features.</p>
+                    </div>
+                    <div>
+                        <h4>📴 Offline Ready</h4>
+                        <p>Works completely offline after initial setup. No internet required.</p>
+                    </div>
+                </div>
             </div>
         </div>
         
         <!-- Use Cases -->
         <div class="features fade-in">
             <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Web App - Instant Access</h3>
+                <p>Perfect for quick token counts, API cost planning, and general use. Works entirely in your browser with no installation.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Local App - Maximum Privacy</h3>
+                <p>Ideal for sensitive documents, confidential content, and when you need complete offline functionality with OCR support.</p>
+            </div>
+            
+            <div class="feature-card">
                 <div class="feature-icon">💸</div>
                 <h3>API Cost Planning</h3>
-                <p>Calculate exact costs before making expensive API calls. Optimize your budget and avoid surprises.</p>
+                <p>Calculate exact costs before making expensive API calls. Both versions support accurate cost estimation for all major models.</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">📏</div>
                 <h3>Context Management</h3>
-                <p>Ensure your prompts fit within model context windows. Perfect for GPT-4's 8K/32K limits.</p>
+                <p>Ensure your prompts fit within model context windows. Perfect for GPT-4's 8K/32K limits and other model constraints.</p>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">🔬</div>
                 <h3>Research & Analysis</h3>
-                <p>Analyze tokenization patterns across different models. Great for AI research and optimization.</p>
+                <p>Analyze tokenization patterns across different models. Great for AI research, optimization, and understanding model behavior.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Document Processing</h3>
+                <p>Process PDF, DOCX, and TXT files. Web version handles text-based files, local version includes OCR for scanned documents.</p>
             </div>
         </div>
     </div>
