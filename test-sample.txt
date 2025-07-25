@@ -1,0 +1,1 @@
+This is a simple test file to verify that the token counting functionality works correctly in the web application. It contains multiple sentences with various punctuation marks, numbers like 123 and 456, and some technical terms like "tokenization", "JavaScript", and "API". This should provide a good test case for the tiktoken.js library integration.
