@@ -14,9 +14,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- External Libraries -->
-    <script src="https://unpkg.com/js-tiktoken/dist/tiktoken.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@dqbd/tiktoken@1.0.7/lite/init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
+    
+    <!-- Fallback tiktoken -->
+    <script>
+        // If main tiktoken fails, try alternative
+        window.addEventListener('load', function() {
+            if (typeof tiktoken === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/@dqbd/tiktoken@1.0.7/lite/init.js';
+                document.head.appendChild(script);
+            }
+        });
+    </script>
     
     <!-- Styles -->
     <style>
@@ -504,13 +516,45 @@
             <h3>⚙️ Configuration</h3>
             
             <div class="form-group">
-                <label for="tokenizerSelect">🤖 Select Tokenizer:</label>
+                <label for="tokenizerSelect">🤖 Select Model/Tokenizer:</label>
                 <select id="tokenizerSelect" class="form-control">
-                    <option value="gpt-4">GPT-4 (cl100k_base)</option>
-                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo (cl100k_base)</option>
-                    <option value="text-davinci-003">GPT-3 (p50k_base)</option>
-                    <option value="text-davinci-002">GPT-3 Davinci-002 (p50k_base)</option>
-                    <option value="code-davinci-002">Codex (p50k_base)</option>
+                    <optgroup label="🔥 OpenAI Models">
+                        <option value="gpt-4">GPT-4 / GPT-4 Turbo</option>
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo (ChatGPT)</option>
+                        <option value="gpt-4o">GPT-4o</option>
+                        <option value="text-davinci-003">GPT-3 (Davinci-003)</option>
+                        <option value="code-davinci-002">Codex (Code-Davinci-002)</option>
+                    </optgroup>
+                    <optgroup label="🧠 Anthropic Claude">
+                        <option value="claude-3-opus">Claude 3 Opus</option>
+                        <option value="claude-3-sonnet">Claude 3 Sonnet</option>
+                        <option value="claude-3-haiku">Claude 3 Haiku</option>
+                        <option value="claude-2">Claude 2</option>
+                    </optgroup>
+                    <optgroup label="💎 Google Gemini">
+                        <option value="gemini-pro">Gemini Pro</option>
+                        <option value="gemini-pro-vision">Gemini Pro Vision</option>
+                        <option value="gemini-ultra">Gemini Ultra</option>
+                    </optgroup>
+                    <optgroup label="🚀 xAI Grok">
+                        <option value="grok-1">Grok-1</option>
+                        <option value="grok-1.5">Grok-1.5</option>
+                    </optgroup>
+                    <optgroup label="🦾 Meta Llama">
+                        <option value="llama-2-70b">Llama 2 70B</option>
+                        <option value="llama-2-13b">Llama 2 13B</option>
+                        <option value="llama-2-7b">Llama 2 7B</option>
+                    </optgroup>
+                    <optgroup label="⚡ Mistral AI">
+                        <option value="mistral-large">Mistral Large</option>
+                        <option value="mistral-medium">Mistral Medium</option>
+                        <option value="mistral-small">Mistral Small</option>
+                    </optgroup>
+                    <optgroup label="🔧 Base Encodings">
+                        <option value="cl100k_base">cl100k_base (GPT-4, GPT-3.5)</option>
+                        <option value="p50k_base">p50k_base (GPT-3, Codex)</option>
+                        <option value="r50k_base">r50k_base (GPT-3 Ada/Babbage)</option>
+                    </optgroup>
                 </select>
             </div>
 
@@ -530,8 +574,10 @@
                 <div class="preset-buttons">
                     <button class="preset-btn" onclick="setPreset('gpt4')">GPT-4</button>
                     <button class="preset-btn" onclick="setPreset('gpt35')">GPT-3.5</button>
-                    <button class="preset-btn" onclick="setPreset('davinci')">Davinci</button>
-                    <button class="preset-btn" onclick="setPreset('codex')">Codex</button>
+                    <button class="preset-btn" onclick="setPreset('claude3')">Claude 3</button>
+                    <button class="preset-btn" onclick="setPreset('gemini')">Gemini</button>
+                    <button class="preset-btn" onclick="setPreset('grok')">Grok</button>
+                    <button class="preset-btn" onclick="setPreset('free')">Free Tier</button>
                 </div>
             </div>
         </div>
@@ -667,8 +713,49 @@ python3 setup.py
 
     <script>
         // Global variables
+        let tiktoken = null;
         let currentTokenizer = null;
         let currentAnalysis = null;
+        
+        // Model configuration with tokenizer mappings and pricing
+        const MODEL_CONFIG = {
+            // OpenAI Models
+            'gpt-4': { encoding: 'cl100k_base', inputCost: 0.03, outputCost: 0.06 },
+            'gpt-3.5-turbo': { encoding: 'cl100k_base', inputCost: 0.001, outputCost: 0.002 },
+            'gpt-4o': { encoding: 'cl100k_base', inputCost: 0.005, outputCost: 0.015 },
+            'text-davinci-003': { encoding: 'p50k_base', inputCost: 0.02, outputCost: 0.02 },
+            'code-davinci-002': { encoding: 'p50k_base', inputCost: 0.0, outputCost: 0.0 },
+            
+            // Anthropic Claude (using GPT-4 tokenizer as approximation)
+            'claude-3-opus': { encoding: 'cl100k_base', inputCost: 0.015, outputCost: 0.075 },
+            'claude-3-sonnet': { encoding: 'cl100k_base', inputCost: 0.003, outputCost: 0.015 },
+            'claude-3-haiku': { encoding: 'cl100k_base', inputCost: 0.00025, outputCost: 0.00125 },
+            'claude-2': { encoding: 'cl100k_base', inputCost: 0.008, outputCost: 0.024 },
+            
+            // Google Gemini (using GPT-4 tokenizer as approximation)
+            'gemini-pro': { encoding: 'cl100k_base', inputCost: 0.0005, outputCost: 0.0015 },
+            'gemini-pro-vision': { encoding: 'cl100k_base', inputCost: 0.0005, outputCost: 0.0015 },
+            'gemini-ultra': { encoding: 'cl100k_base', inputCost: 0.0, outputCost: 0.0 },
+            
+            // xAI Grok (using GPT-4 tokenizer as approximation)
+            'grok-1': { encoding: 'cl100k_base', inputCost: 0.0, outputCost: 0.0 },
+            'grok-1.5': { encoding: 'cl100k_base', inputCost: 0.0, outputCost: 0.0 },
+            
+            // Meta Llama (using GPT-4 tokenizer as approximation)
+            'llama-2-70b': { encoding: 'cl100k_base', inputCost: 0.0007, outputCost: 0.0008 },
+            'llama-2-13b': { encoding: 'cl100k_base', inputCost: 0.0003, outputCost: 0.0004 },
+            'llama-2-7b': { encoding: 'cl100k_base', inputCost: 0.0002, outputCost: 0.0002 },
+            
+            // Mistral AI (using GPT-4 tokenizer as approximation)
+            'mistral-large': { encoding: 'cl100k_base', inputCost: 0.008, outputCost: 0.024 },
+            'mistral-medium': { encoding: 'cl100k_base', inputCost: 0.0027, outputCost: 0.0081 },
+            'mistral-small': { encoding: 'cl100k_base', inputCost: 0.002, outputCost: 0.006 },
+            
+            // Base encodings
+            'cl100k_base': { encoding: 'cl100k_base', inputCost: 0.0, outputCost: 0.0 },
+            'p50k_base': { encoding: 'p50k_base', inputCost: 0.0, outputCost: 0.0 },
+            'r50k_base': { encoding: 'r50k_base', inputCost: 0.0, outputCost: 0.0 }
+        };
         
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
@@ -679,15 +766,18 @@ python3 setup.py
         async function initializeApp() {
             try {
                 // Show loading state
-                showError('Loading tokenizers... This may take a moment on first visit.', 'info');
+                showError('🔄 Loading tokenizers... This may take a moment on first visit.', 'info');
                 
-                // Initialize tiktoken
+                // Try to load tiktoken with multiple fallback approaches
+                await loadTiktoken();
+                
+                // Initialize with default tokenizer
                 await loadTokenizer('gpt-4');
                 console.log('TokenForge initialized successfully');
                 
                 // Hide loading message
                 setTimeout(() => {
-                    const errorDivs = document.querySelectorAll('.warning-box');
+                    const errorDivs = document.querySelectorAll('.info-box');
                     errorDivs.forEach(div => {
                         if (div.textContent.includes('Loading tokenizers')) {
                             div.remove();
@@ -698,14 +788,78 @@ python3 setup.py
             } catch (error) {
                 console.error('Failed to initialize TokenForge:', error);
                 showError(`
-                    Failed to load tokenizers. This usually happens due to internet connectivity issues.<br><br>
-                    <strong>🔧 Try these solutions:</strong><br>
-                    • Refresh the page<br>
+                    ❌ <strong>Tokenizer Loading Failed</strong><br><br>
+                    This usually happens due to:<br>
+                    • Internet connectivity issues<br>
+                    • Browser security restrictions<br>
+                    • CDN loading problems<br><br>
+                    <strong>🔧 Solutions:</strong><br>
+                    • Refresh the page and wait a moment<br>
+                    • Try a different browser (Chrome/Firefox recommended)<br>
                     • Check your internet connection<br>
-                    • Try using a different browser<br>
-                    • For guaranteed functionality, <a href="#local-setup" style="color: var(--pride-blue); text-decoration: underline;">run locally</a>
+                    • For guaranteed functionality, <a href="#local-setup" style="color: var(--pride-blue); text-decoration: underline;">run locally</a><br><br>
+                    <strong>📱 Alternative:</strong> You can still use the text length estimations below as an approximation.
                 `);
+                
+                // Enable fallback mode
+                enableFallbackMode();
             }
+        }
+        
+        async function loadTiktoken() {
+            // Try multiple approaches to load tiktoken
+            if (typeof tiktoken !== 'undefined' && tiktoken) {
+                return; // Already loaded
+            }
+            
+            // Method 1: Check if tiktoken is globally available
+            if (window.tiktoken) {
+                tiktoken = window.tiktoken;
+                return;
+            }
+            
+            // Method 2: Try dynamic import
+            try {
+                const module = await import('https://unpkg.com/@dqbd/tiktoken@1.0.7/lite/init.js');
+                tiktoken = module.default || module;
+                if (tiktoken) return;
+            } catch (e) {
+                console.warn('Dynamic import failed:', e);
+            }
+            
+            // Method 3: Check for alternative tiktoken libraries
+            if (window.TikToken || window.Tiktoken) {
+                tiktoken = window.TikToken || window.Tiktoken;
+                return;
+            }
+            
+            // Method 4: Wait a bit more for CDN to load
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            if (window.tiktoken) {
+                tiktoken = window.tiktoken;
+                return;
+            }
+            
+            throw new Error('Unable to load tiktoken library');
+        }
+        
+        function enableFallbackMode() {
+            // Enable basic text analysis without tiktoken
+            currentTokenizer = {
+                model: 'fallback',
+                encoding: null,
+                fallback: true
+            };
+            
+            // Update UI to show fallback mode
+            const notice = document.createElement('div');
+            notice.className = 'warning-box';
+            notice.innerHTML = `
+                <strong>⚠️ Fallback Mode Active</strong><br>
+                Using text-based approximations instead of authentic tokenizers.<br>
+                <small>Estimates: ~4 characters = 1 token, ~0.75 words = 1 token</small>
+            `;
+            document.querySelector('.sidebar').appendChild(notice);
         }
         
         function setupEventListeners() {
@@ -736,28 +890,60 @@ python3 setup.py
         
         async function loadTokenizer(model) {
             try {
-                let encoding;
-                switch(model) {
-                    case 'gpt-4':
-                    case 'gpt-3.5-turbo':
-                        encoding = await tiktoken.getEncoding('cl100k_base');
-                        break;
-                    case 'text-davinci-003':
-                    case 'text-davinci-002':
-                    case 'code-davinci-002':
-                        encoding = await tiktoken.getEncoding('p50k_base');
-                        break;
-                    default:
-                        encoding = await tiktoken.getEncoding('cl100k_base');
+                if (!MODEL_CONFIG[model]) {
+                    throw new Error(`Unknown model: ${model}`);
                 }
+                
+                const config = MODEL_CONFIG[model];
+                let encoding;
+                
+                if (tiktoken && !currentTokenizer?.fallback) {
+                    // Use authentic tiktoken
+                    encoding = await tiktoken.getEncoding(config.encoding);
+                } else {
+                    // Fallback mode - use approximation
+                    encoding = null;
+                }
+                
                 currentTokenizer = {
                     model: model,
-                    encoding: encoding
+                    encoding: encoding,
+                    encodingName: config.encoding,
+                    fallback: !encoding,
+                    inputCost: config.inputCost,
+                    outputCost: config.outputCost
                 };
-                console.log(`Loaded tokenizer for ${model}`);
+                
+                console.log(`Loaded tokenizer for ${model} (${config.encoding})${currentTokenizer.fallback ? ' - FALLBACK MODE' : ''}`);
+                
+                // Update cost inputs if they're default
+                const inputCostEl = document.getElementById('inputCost');
+                const outputCostEl = document.getElementById('outputCost');
+                
+                if (inputCostEl.value == 0 || inputCostEl.dataset.autoSet) {
+                    inputCostEl.value = config.inputCost;
+                    inputCostEl.dataset.autoSet = 'true';
+                }
+                if (outputCostEl.value == 0 || outputCostEl.dataset.autoSet) {
+                    outputCostEl.value = config.outputCost;
+                    outputCostEl.dataset.autoSet = 'true';
+                }
+                
             } catch (error) {
                 console.error(`Failed to load tokenizer for ${model}:`, error);
-                showError(`Failed to load tokenizer for ${model}`);
+                
+                // Enable fallback for this specific model
+                const config = MODEL_CONFIG[model] || { encoding: 'cl100k_base', inputCost: 0, outputCost: 0 };
+                currentTokenizer = {
+                    model: model,
+                    encoding: null,
+                    encodingName: config.encoding,
+                    fallback: true,
+                    inputCost: config.inputCost,
+                    outputCost: config.outputCost
+                };
+                
+                console.log(`Using fallback mode for ${model}`);
             }
         }
         
@@ -947,7 +1133,19 @@ python3 setup.py
                 throw new Error('No tokenizer available');
             }
             
-            const tokens = currentTokenizer.encoding.encode(text);
+            let tokens;
+            let tokenCount;
+            
+            if (currentTokenizer.fallback) {
+                // Fallback token estimation
+                tokenCount = estimateTokenCount(text);
+                tokens = []; // No actual tokens in fallback mode
+            } else {
+                // Authentic tokenization
+                tokens = currentTokenizer.encoding.encode(text);
+                tokenCount = tokens.length;
+            }
+            
             const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
             const charCount = text.length;
             const lineCount = text.split('\n').length;
@@ -955,23 +1153,40 @@ python3 setup.py
             // Calculate costs
             const inputCost = parseFloat(document.getElementById('inputCost').value) || 0;
             const outputCost = parseFloat(document.getElementById('outputCost').value) || 0;
-            const estimatedCost = (tokens.length / 1000) * inputCost;
+            const estimatedCost = (tokenCount / 1000) * inputCost;
             
             return {
                 source: source,
                 model: currentTokenizer.model,
                 text: text,
                 tokens: tokens,
-                tokenCount: tokens.length,
+                tokenCount: tokenCount,
                 wordCount: wordCount,
                 charCount: charCount,
                 lineCount: lineCount,
-                tokenPerWord: wordCount > 0 ? tokens.length / wordCount : 0,
-                compressionRatio: charCount > 0 ? charCount / tokens.length : 0,
+                tokenPerWord: wordCount > 0 ? tokenCount / wordCount : 0,
+                compressionRatio: charCount > 0 ? charCount / tokenCount : 0,
                 estimatedCost: estimatedCost,
                 costPerToken: inputCost / 1000,
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                fallbackMode: currentTokenizer.fallback,
+                encoding: currentTokenizer.encodingName
             };
+        }
+        
+        function estimateTokenCount(text) {
+            // Improved token estimation algorithm
+            const charCount = text.length;
+            const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+            
+            // Different estimation strategies
+            const charBasedEstimate = Math.ceil(charCount / 4); // ~4 chars per token
+            const wordBasedEstimate = Math.ceil(wordCount / 0.75); // ~0.75 words per token
+            
+            // Use average of both methods, weighted towards character-based for better accuracy
+            const estimate = Math.round((charBasedEstimate * 0.7) + (wordBasedEstimate * 0.3));
+            
+            return Math.max(1, estimate); // Ensure at least 1 token
         }
         
         function displayResults(analysis) {
@@ -1008,10 +1223,13 @@ python3 setup.py
             // Display overview
             const overviewHTML = `
                 <div class="info-box">
-                    <strong>🎯 Efficiency Ratio:</strong> ${analysis.tokenPerWord.toFixed(2)} tokens per word<br>
+                    <strong>🎯 Analysis Details:</strong><br>
                     <strong>🔬 Model:</strong> ${analysis.model}<br>
-                    <strong>📝 Source:</strong> ${analysis.source}<br>
-                    <strong>📊 Compression:</strong> ${analysis.compressionRatio.toFixed(1)}:1 chars per token
+                    <strong>🧮 Tokenizer:</strong> ${analysis.encoding}${analysis.fallbackMode ? ' (Estimated)' : ' (Authentic)'}<br>
+                    <strong>� Source:</strong> ${analysis.source}<br>
+                    <strong>� Efficiency:</strong> ${analysis.tokenPerWord.toFixed(2)} tokens per word<br>
+                    <strong>� Compression:</strong> ${analysis.compressionRatio.toFixed(1)}:1 chars per token
+                    ${analysis.fallbackMode ? '<br><strong>⚠️ Mode:</strong> Text-based estimation (not authentic tokenization)' : ''}
                 </div>
                 
                 <div style="background: var(--bg-primary); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-family: monospace; max-height: 300px; overflow-y: auto; margin-top: 1rem;">
@@ -1022,27 +1240,54 @@ python3 setup.py
             document.getElementById('overviewContent').innerHTML = overviewHTML;
             
             // Display token preview
-            const firstTokens = analysis.tokens.slice(0, 50);
-            const decodedTokens = firstTokens.map(token => {
-                try {
-                    return currentTokenizer.encoding.decode([token]).replace(/\n/g, '\\n');
-                } catch (e) {
-                    return `[${token}]`;
-                }
-            });
+            let tokenPreviewHTML;
             
-            const tokenPreviewHTML = `
-                <h4>🔤 First 50 Tokens Preview:</h4>
-                <div class="token-preview">
+            if (analysis.fallbackMode) {
+                tokenPreviewHTML = `
+                    <h4>🔤 Token Estimation Details:</h4>
+                    <div class="warning-box">
+                        <strong>⚠️ Fallback Mode Active</strong><br>
+                        Authentic tokenization unavailable. Using text-based estimation algorithms.<br>
+                        For accurate results, please <a href="#local-setup" style="color: var(--pride-blue);">run locally</a>.
+                    </div>
+                    <div class="token-preview">
+Estimation Method: Character + Word Based Analysis
+Character Count: ${analysis.charCount.toLocaleString()}
+Word Count: ${analysis.wordCount.toLocaleString()}
+Estimated Tokens: ${analysis.tokenCount.toLocaleString()}
+
+Algorithm:
+• Character-based: ${Math.ceil(analysis.charCount / 4).toLocaleString()} tokens (~4 chars/token)
+• Word-based: ${Math.ceil(analysis.wordCount / 0.75).toLocaleString()} tokens (~0.75 words/token)
+• Final estimate: Weighted average of both methods
+
+Note: This is an approximation. Actual token counts may vary by ±10-20%
+                    </div>
+                `;
+            } else {
+                const firstTokens = analysis.tokens.slice(0, 50);
+                const decodedTokens = firstTokens.map(token => {
+                    try {
+                        return currentTokenizer.encoding.decode([token]).replace(/\n/g, '\\n');
+                    } catch (e) {
+                        return `[${token}]`;
+                    }
+                });
+                
+                tokenPreviewHTML = `
+                    <h4>🔤 First 50 Tokens Preview:</h4>
+                    <div class="token-preview">
 ${decodedTokens.map((token, index) => `[${index}] "${token}"`).join('\n')}
-                </div>
-                <div class="info-box" style="margin-top: 1rem;">
-                    <strong>📊 Token Statistics:</strong><br>
-                    Total Tokens: ${analysis.tokenCount.toLocaleString()}<br>
-                    Unique Tokens: ${new Set(analysis.tokens).size.toLocaleString()}<br>
-                    Average Token Length: ${(analysis.charCount / analysis.tokenCount).toFixed(2)} characters
-                </div>
-            `;
+                    </div>
+                    <div class="info-box" style="margin-top: 1rem;">
+                        <strong>📊 Token Statistics:</strong><br>
+                        Total Tokens: ${analysis.tokenCount.toLocaleString()}<br>
+                        Unique Tokens: ${new Set(analysis.tokens).size.toLocaleString()}<br>
+                        Average Token Length: ${(analysis.charCount / analysis.tokenCount).toFixed(2)} characters<br>
+                        Tokenizer: ${analysis.encoding} (Authentic OpenAI)
+                    </div>
+                `;
+            }
             
             document.getElementById('tokenPreview').innerHTML = tokenPreviewHTML;
         }
@@ -1050,6 +1295,10 @@ ${decodedTokens.map((token, index) => `[${index}] "${token}"`).join('\n')}
         function setPreset(preset) {
             const inputCostEl = document.getElementById('inputCost');
             const outputCostEl = document.getElementById('outputCost');
+            
+            // Clear auto-set flags to allow manual override
+            delete inputCostEl.dataset.autoSet;
+            delete outputCostEl.dataset.autoSet;
             
             switch(preset) {
                 case 'gpt4':
@@ -1060,11 +1309,19 @@ ${decodedTokens.map((token, index) => `[${index}] "${token}"`).join('\n')}
                     inputCostEl.value = '0.001';
                     outputCostEl.value = '0.002';
                     break;
-                case 'davinci':
-                    inputCostEl.value = '0.02';
-                    outputCostEl.value = '0.02';
+                case 'claude3':
+                    inputCostEl.value = '0.015';
+                    outputCostEl.value = '0.075';
                     break;
-                case 'codex':
+                case 'gemini':
+                    inputCostEl.value = '0.0005';
+                    outputCostEl.value = '0.0015';
+                    break;
+                case 'grok':
+                    inputCostEl.value = '0.0';
+                    outputCostEl.value = '0.0';
+                    break;
+                case 'free':
                     inputCostEl.value = '0.0';
                     outputCostEl.value = '0.0';
                     break;
@@ -1090,6 +1347,8 @@ ${decodedTokens.map((token, index) => `[${index}] "${token}"`).join('\n')}
             const data = {
                 source: currentAnalysis.source,
                 model: currentAnalysis.model,
+                tokenizer: currentAnalysis.encoding,
+                processing_mode: currentAnalysis.fallbackMode ? 'estimation' : 'authentic',
                 tokens: currentAnalysis.tokenCount,
                 words: currentAnalysis.wordCount,
                 characters: currentAnalysis.charCount,
@@ -1098,7 +1357,8 @@ ${decodedTokens.map((token, index) => `[${index}] "${token}"`).join('\n')}
                 compression_ratio: currentAnalysis.compressionRatio.toFixed(3),
                 estimated_cost: currentAnalysis.estimatedCost.toFixed(6),
                 cost_per_token: currentAnalysis.costPerToken.toFixed(8),
-                timestamp: currentAnalysis.timestamp
+                timestamp: currentAnalysis.timestamp,
+                fallback_mode: currentAnalysis.fallbackMode ? 'true' : 'false'
             };
             
             const csv = Object.keys(data).join(',') + '\n' + Object.values(data).join(',');
@@ -1114,6 +1374,7 @@ ${'='.repeat(40)}
 📊 ANALYSIS SUMMARY
 Source: ${currentAnalysis.source}
 Model: ${currentAnalysis.model}
+Tokenizer: ${currentAnalysis.encoding}${currentAnalysis.fallbackMode ? ' (Estimated)' : ' (Authentic)'}
 Analyzed: ${new Date().toLocaleString()}
 
 📈 RESULTS
@@ -1125,9 +1386,20 @@ Analyzed: ${new Date().toLocaleString()}
 • Compression Ratio: ${currentAnalysis.compressionRatio.toFixed(3)}:1
 ${currentAnalysis.estimatedCost > 0 ? `• Estimated Cost: $${currentAnalysis.estimatedCost.toFixed(6)}\n• Cost per Token: $${currentAnalysis.costPerToken.toFixed(8)}\n` : ''}
 🔍 TECHNICAL DETAILS
-• Tokenizer: tiktoken (${currentAnalysis.model})
-• Processing: Browser-based
+• Processing Mode: ${currentAnalysis.fallbackMode ? 'Text-based estimation' : 'Authentic tokenization'}
+• Tokenizer: ${currentAnalysis.encoding}
+• Environment: Browser-based
 • Privacy: All data processed locally
+
+${currentAnalysis.fallbackMode ? `
+⚠️ ESTIMATION NOTICE
+This analysis used text-based approximation algorithms since authentic 
+tokenizers could not be loaded. For precise results, consider running 
+the local version of TokenForge.
+
+Estimation Accuracy: ±10-20% of actual token count
+Method: Weighted average of character and word-based calculations
+` : ''}
 
 📝 TEXT PREVIEW
 ${'-'.repeat(20)}

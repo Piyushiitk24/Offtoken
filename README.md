@@ -84,13 +84,26 @@ streamlit run app.py
 
 ## 📊 Supported Models
 
-| Model | Tokenizer | Web App | Local App | Best For |
-|-------|-----------|---------|-----------|----------|
-| **GPT-4** | `cl100k_base` | ✅ | ✅ | Most accurate GPT-4 API usage |
-| **GPT-3.5 Turbo** | `cl100k_base` | ✅ | ✅ | ChatGPT and GPT-3.5 APIs |
-| **GPT-3** | `p50k_base` | ✅ | ✅ | Legacy GPT-3 applications |
-| **Codex** | `p50k_base` | ✅ | ✅ | GitHub Copilot and code models |
-| **HuggingFace Models** | Various | ❌ | ✅ | Llama, Mistral, Gemma, etc. |
+| Provider | Model | Web App | Local App | Tokenizer | Best For |
+|----------|-------|---------|-----------|-----------|----------|
+| **OpenAI** | GPT-4 / GPT-4 Turbo | ✅ | ✅ | cl100k_base | Most accurate GPT-4 API usage |
+| **OpenAI** | GPT-3.5 Turbo | ✅ | ✅ | cl100k_base | ChatGPT and GPT-3.5 APIs |
+| **OpenAI** | GPT-4o | ✅ | ✅ | cl100k_base | Latest multimodal model |
+| **OpenAI** | GPT-3 (Davinci) | ✅ | ✅ | p50k_base | Legacy GPT-3 applications |
+| **OpenAI** | Codex | ✅ | ✅ | p50k_base | GitHub Copilot and code models |
+| **Anthropic** | Claude 3 Opus | ✅* | ✅ | cl100k_base* | Long context, complex reasoning |
+| **Anthropic** | Claude 3 Sonnet | ✅* | ✅ | cl100k_base* | Balanced performance |
+| **Anthropic** | Claude 3 Haiku | ✅* | ✅ | cl100k_base* | Fast, cost-effective |
+| **Anthropic** | Claude 2 | ✅* | ✅ | cl100k_base* | Previous generation |
+| **Google** | Gemini Pro | ✅* | ✅ | cl100k_base* | Google's flagship model |
+| **Google** | Gemini Pro Vision | ✅* | ✅ | cl100k_base* | Multimodal capabilities |
+| **Google** | Gemini Ultra | ✅* | ✅ | cl100k_base* | Most capable Google model |
+| **xAI** | Grok-1 | ✅* | ✅ | cl100k_base* | Real-time information |
+| **xAI** | Grok-1.5 | ✅* | ✅ | cl100k_base* | Enhanced capabilities |
+| **Meta** | Llama 2 (70B/13B/7B) | ✅* | ✅ | cl100k_base* | Open source models |
+| **Mistral** | Large/Medium/Small | ✅* | ✅ | cl100k_base* | European AI models |
+
+**\* Note:** Non-OpenAI models use OpenAI tokenizer approximations in the web app. Local app may include native tokenizers for some models.
 
 ## 🎯 Use Cases
 
